@@ -23,9 +23,21 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view("product.create");
+        $productsCount = $request->productsCount;
+
+        if(!$productsCount) {
+            $productsCount = 2;
+        }
+
+        if($request->productAdd == "plus") {
+            $productsCount++;
+        } else if($request->productAdd == "minus") {
+            $productsCount--;
+        }
+
+        return view("product.create", ["productsCount" => $productsCount]);
     }
 
     /**
@@ -38,15 +50,22 @@ class ProductController extends Controller
     {
         // $product = new Product;
 
+        $request->validate([
+            "productTitle.*.title" => "required",
+            "productPrice.*.price" => "required",
+            "productExcerpt.*.excerpt" => "required",
+            "productDescription.*.description" => "required",
+        ]);
+
         $productsCount = count($request->productTitle); // 3
 
         for ($i = 0; $i<$productsCount; $i++ ) {
             $product = new Product;
             //$i
-            $product->title = $request->productTitle[$i];
-            $product->price = $request->productPrice[$i];
-            $product->excerpt = $request->productExcerpt[$i];
-            $product->description = $request->productDescription[$i];
+            $product->title = $request->productTitle[$i]['title'];
+            $product->price = $request->productPrice[$i]['price'];
+            $product->excerpt = $request->productExcerpt[$i]['excerpt'];
+            $product->description = $request->productDescription[$i]['description'];
             $product->save();
         }
 

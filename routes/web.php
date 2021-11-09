@@ -24,3 +24,7 @@ Route::prefix('products')->group(function () {
     Route::post('store', 'ProductController@store')->name('product.store');
 
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
