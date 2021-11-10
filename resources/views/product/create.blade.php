@@ -4,6 +4,9 @@
 @section('content')
 
 @if ($errors->any())
+
+{{-- <?php dd($errors) ?> --}}
+
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
@@ -47,14 +50,28 @@
                 @for ($i=0; $i<$productsCount; $i++ )
                 <div class="product">
                     <input type="text" name="productTitle[][title]" />
+                    @error("productTitle.".$i.".title")
+                        {{$message}}
+                    @enderror
                     <input type="text" name="productPrice[][price]" />
+                    @error("productPrice.".$i.".price")
+                        {{$message}}
+                    @enderror
                     <textarea name="productExcerpt[][excerpt]"></textarea>
+                    @error("productExcerpt.".$i.".excerpt")
+                        {{$message}}
+                    @enderror
                     <textarea name="productDescription[][description]"></textarea>
+                    @error("productDescription.".$i.".description")
+                        {{$message}}
+                    @enderror
                     <button type="button" class="btn btn-danger remove-product">-</button>
                 </div>
                 @endfor
             </div>
-
+            {{-- @error("productTitle")
+                {{$message}}
+            @enderror --}}
 
         <button type="submit">Add</button>
     </form>
